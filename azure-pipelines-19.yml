@@ -1,0 +1,46 @@
+trigger:
+- main
+
+pool: Ubuntu latest
+
+jobs:
+- job: setup_prerequisite
+  steps:
+  - task: 
+    inputs:
+      versionSpec: '3.x'
+      addToPath: true
+  - script: |
+      
+    displayName: 'Install dependencies'
+
+- job: lint
+  container:
+    image: 
+  steps:
+  - script: |
+
+    displayName: 'YAML Lint'
+  - script: |
+
+    displayName: 'Terraform Lint'
+  - script: |
+
+    displayName: 'ESLint'
+
+- job: test
+  steps:
+  - script: |
+      pytest
+    displayName: 'Run tests'
+
+- job: plan
+  steps:
+  - script: |
+
+    displayName: 'Terraform Plan'
+  - script: |
+
+  
+    displayName: 'Terraform Apply'
+
