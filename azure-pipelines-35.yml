@@ -1,0 +1,80 @@
+trigger:
+- main
+
+pool: Ubuntu latest
+
+stages:
+- stage: Build
+  displayName: Build
+  jobs:
+  - job: Build
+    displayName: Build
+    steps:
+    - checkout: self
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '>= 14.x'
+      displayName: 'Install Node.js'
+    # - script: |
+    #     npm install
+    #     npm run build
+    #   displayName: 'Build'
+    # - task: PublishBuildArtifacts@1
+    #   inputs:
+    #     PathtoPublish: '$(System.DefaultWorkingDirectory)/build'
+    #     ArtifactName: 'build'
+    #   displayName: 'Archive Production Artifact'
+
+- stage: Lint
+  displayName: Lint
+  jobs:
+  - job: Lint
+    displayName: Lint
+    steps:
+    - checkout: self
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '>= 14.x'
+      displayName: 'Install Node.js'
+    - script: |
+        npm install
+        yarn lint
+      displayName: 'Run Linting'
+
+- stage: DependencyCheck
+  displayName: Dependency Vulnerability Check
+  jobs:
+  - job: DependencyCheck
+    displayName: Dependency Vulnerability Check
+    steps:
+    - checkout: self
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '>= 14.x'
+      displayName: 'Install Node.js'
+#     - script: |
+#         npm install
+#         sudo npm install -g npm-audit-html
+#         npm audit --json | npm-audit-html --output npm-audit.html
+#       displayName: 'Install plugin and check for vulnerabilities'
+#     - task: PublishBuildArtifacts@1
+#       inputs:
+#         PathtoPublish: '$(System.DefaultWorkingDirectory)/npm-audit.html'
+#         ArtifactName: 'npm-audit-report'
+#       displayName: 'Archive Artifacts'
+
+- stage: Test
+  displayName: Test
+  jobs:
+  - job: Test
+    displayName: Test
+    steps:
+    - checkout: self
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '>= 14.x'
+      displayName: 'Install Node.js'
+#     - script: |
+#         npm install
+#         npm test
+#       displayName: 'Run Tests'
